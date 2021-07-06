@@ -24,17 +24,17 @@ timage=loadAnimation("trex1.png","trex3.png","trex4.png");
   restart=loadImage("restart.png");
 }
 function setup(){
-  createCanvas(600,200)
-  trex=createSprite(50,160,10,10);
+  createCanvas(windowWidth,windowHeight)
+  trex=createSprite(50,windowHeight-40,10,10);
   trex.addAnimation("running",timage)
   trex.addAnimation("collided",collidedTrex);
   trex.scale=0.6;
   
-  ground=createSprite(0,190);
+  ground=createSprite(0,windowHeight-40);
   ground.x=ground.width/2;
   ground.addImage(gimage);
   
-  iGround=createSprite(0,191,600,10);
+  iGround=createSprite(0,windowHeight-30,600,10);
   ObstacleG=createGroup();
   cloudsG=createGroup();
   
@@ -108,7 +108,7 @@ else if(gameState===END)
   trex.collide(iGround);
   
   iGround.visible=false;
-  console.log(frameRate());
+ // console.log(frameRate());
   
   
   
@@ -121,27 +121,28 @@ else if(gameState===END)
 }
 function spawnCloud()
 {
-  if(frameCount%60===0)
+  if(frameCount%100===0)
   {
-    var r=random(50,100)
-   cloud=createSprite(600,r,10,10);
+    var r=random(100,windowHeight/2)
+   cloud=createSprite(windowWidth,r,10,10);
    cloud.addImage(cImage);
    cloud.velocityX=-5;
-   cloud.scale=0.5;
+   //cloud.scale=0.5;
+   cloud.lifetime = windowWidth/5;
    cloud.depth = trex.depth;
    trex.depth = trex.depth + 1;
    cloudsG.add(cloud);
   }
 }
 function spawnobstacle() {
-  //write code here to spawn the clouds
-  if (World.frameCount % 60 === 0) {
-    var obstacle = createSprite(400,180,40,10);
+  //write code here to spawn the obstacles
+  if (World.frameCount % 200 === 0) {
+    var obstacle = createSprite(windowWidth,windowHeight-50,40,10);
     var r=Math.round(random(1,6));
     
-    obstacle.scale = 0.5;
+    obstacle.scale = 1;
     obstacle.velocityX = -3;
-    obstacle.lifetime = 134;
+    obstacle.lifetime = windowWidth/3;
     
     switch(r)
     {
@@ -165,11 +166,11 @@ function spawnobstacle() {
 
 function reset()
   {
-    gameState=PLAY;
+   gameState=PLAY;
     gameOver1.visible=false;
     restart1.visible=false;
     ObstacleG.destroyEach();
     cloudsG.destroyEach();
     trex.changeAnimation("running",timage);
-    
+    count=0;
   }
